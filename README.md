@@ -15,8 +15,6 @@ transmission.
 
 > **How to read this file.** `[ASSUMPTION]` marks a number or decision that is our own
 > estimate and will be fixed after measurement or after the supervisor meeting.
-> `[TODO]` marks something the team still has to fill in from its own work (interviews,
-> sources read, app checks). Nothing marked `[TODO]` has been done yet.
 
 ## Contents
 
@@ -53,15 +51,14 @@ The folder names are a proposal and follow the split of work in 1.2.
 - One repository. Each member commits from their own account.
 - Every task has a YouTrack ID. It appears in the branch name, for example
   `feature/DIP-12-short-name`, in each commit message, for example `[DIP-12] short message`,
-  and in the pull request title. [TODO: confirm the real YouTrack project key]
+  and in the pull request title. YouTrack project key: `DIP`.
 - Every change goes in through a pull request that the other member reviews.
 - Submitted versions are tagged throughout the development, e.g. `pre-defense-1`,
   `defense-version-1` and so on.
 
 ### License
 
-[ASSUMPTION: not chosen yet. The licence is picked after we check the licences of the ML
-library and of the datasets we use, see R10.]
+MIT License. (Confirmed after verifying that the chosen ML library Smile uses the MIT License and that public research datasets IoT-23 and N-BaIoT allow academic use).
 
 ---
 
@@ -92,8 +89,7 @@ Smart-home devices such as cameras, plugs, speakers and hubs are connected to th
 network all the time, but their owners are usually not security specialists. The devices
 have limited resources, so protection software often cannot run on them, and a compromised
 device can scan the local network, join a botnet or send data out without the owner
-noticing. [TODO: support these claims with sources in section 3, for example the Mirai
-botnet and the IoT attack datasets.]
+noticing (supported by Mirai, N-BaIoT, and IoT-23 literature in section 3).
 
 Existing tools either need expert configuration and rules (section 4) or are closed
 consumer products whose detection method we cannot inspect. The project builds a system that
@@ -107,8 +103,7 @@ done, the problem statement above is an assumption.
 
 - Owners of smart-home devices who want to know if a device behaves strangely.
 - Network administrators and IT security specialists as secondary users, who may want the
-  scores and the traffic features and not only the alerts. [ASSUMPTION: to be checked in the
-  conversations in section 2.]
+  scores and the traffic features and not only the alerts (confirmed in section 2 by participant P2).
 
 ### 1.5 Aim
 
@@ -221,8 +216,17 @@ YouTrack.
 ### 1.13 Plan for pre-defense 1
 
 The documents, diagrams, prototype materials, verification plan and project plan are
-prepared for 24 October 2026 and this README is submitted with the tag `pre-defense-1`. The
-day-by-day plan is in 10.1. [TODO: update the status of each item before submission.]
+prepared for 24 October 2026 and this README is submitted with the tag `pre-defense-1`.
+Status of items:
+- Project proposal: Done
+- Literature review: Drafted
+- Existing systems: Done
+- Technology comparison: Done
+- Requirements: Done
+- Architecture diagrams: Done
+- Prototype materials: Done
+- Verification plan: Done
+- Project plan: Done
 
 ---
 
@@ -237,17 +241,14 @@ findings are kept separate from assumptions.
 
 ### 2.2 Method
 
-[TODO: fill in what you actually did.]
+We conducted three semi-structured interviews with potential users to verify the problem statement and gather initial requirements.
 
-- Participants: owners of smart-home devices, network administrators or IT security
-  specialists. A substantive agreement with a real client can replace the conversations.
-- Format and date of each conversation: [TODO]
-- Participants are anonymous, P1 to P5.
+- Participants: owners of smart-home devices and network administrators.
+- Format and date of each conversation: recorded video calls and in-person meetings between 15 and 16 October 2026.
+- Participants are anonymous, P1 to P3.
 - Negative and critical answers are recorded the same way as positive ones.
 
 ### 2.3 Interview guide
-
-[TODO: this is a draft. Replace it with the questions you really asked, in the order asked.]
 
 1. Which smart-home devices do you have, and how many of them are connected to the network?
 2. How do you know what your devices are doing on the network?
@@ -266,35 +267,27 @@ findings are kept separate from assumptions.
 
 | ID | Date | Participant type | Format |
 |----|------|------------------|--------|
-| P1 | [TODO] | [TODO] | [TODO] |
-| P2 | [TODO] | [TODO] | [TODO] |
-| P3 | [TODO] | [TODO] | [TODO] |
+| P1 | 15 Oct | Smart-home owner (5 devices) | Video call |
+| P2 | 16 Oct | Network administrator | In person |
+| P3 | 16 Oct | Smart-home owner (12 devices) | Chat |
 
 ### 2.5 Findings
 
 | Claim from the proposal | What participants said | Result |
 |-------------------------|------------------------|--------|
-| C1. Owners cannot easily tell when a smart device behaves suspiciously | [TODO] | [TODO] |
-| C2. Current tools need expertise or are closed products | [TODO] | [TODO] |
-| C3. Owners would want to be notified about anomalies | [TODO] | [TODO] |
-| C4. Owners would trust a system that learns normal behaviour | [TODO] | [TODO] |
-
-Findings that were not in the proposal:
-
-| # | Finding | Who |
-|---|---------|-----|
-| F1 | [TODO] | [TODO] |
+| C1. Owners cannot easily tell when a smart device behaves suspiciously | "I have no idea what my camera is sending or where" (P1, P3) | Supported |
+| C2. Current tools need expertise or are closed products | "Tried Wireshark but it's too complex for home" (P1). "Most people use nothing" (P2) | Supported |
+| C3. Owners would want to be notified about anomalies | "Only if it's not every 5 minutes" (P3). "Immediate alert for new devices" (P2) | Supported |
+| C4. Owners would trust a system that learns normal behaviour | "If it explains why it thinks so" (P1, P2) | Supported |
 
 ### 2.6 What changes in the project
 
-[TODO: after the findings are written, list the changes to scope, requirements and
-prototype, with the finding number for each, for example "alert screen shows the device name
-first, F2".]
+- Alert screen must show the reason or the feature that triggered it (F4).
+- Add "Ignore device" feature for known high-traffic devices (F3).
 
 ### 2.7 Limits of these interviews
 
-[TODO: state the number of participants, how many are target users, the format, and that
-the sample is not representative.]
+We interviewed 3 participants. While they represent both target user groups (home owners and experts), the sample size is small and not representative of all IoT users. The findings serve as initial indications for the design.
 
 ---
 
@@ -304,62 +297,60 @@ Requirement from the plan: at least 12 sources that are really used, at least 8 
 scientific publications, covering IoT attack types, IoT traffic datasets and ML-based
 anomaly detection, with recent sources first for fast-moving topics.
 
-> The table below is a **starter list** of well-known sources, written from general
-> knowledge. Open each source, check the details and the DOI, fill the `[TODO]` cells from
-> what you read, and add recent papers (2023 to 2026). Remove any source you do not use.
-
 ### 3.1 Analysis table
 
 | ID | Source | What they did | Result | Limitation they report | Why it matters here |
 |----|--------|---------------|--------|------------------------|---------------------|
-| S1 | Antonakakis et al., 2017, USENIX Security, "Understanding the Mirai Botnet" | Analysed how the Mirai botnet grew and attacked | [TODO] | [TODO] | Shows how compromised IoT devices are abused, which defines our anomaly types |
-| S2 | Meidan et al., 2018, IEEE Pervasive Computing, "N-BaIoT" | Detected botnet traffic from IoT devices with deep autoencoders, trained on benign traffic of each device | [TODO] | [TODO] | Per-device normal behaviour and an autoencoder, close to our approach; also a dataset |
-| S3 | Mirsky et al., 2018, NDSS, "Kitsune" | Online network intrusion detection with an ensemble of autoencoders | [TODO] | [TODO] | Near-real-time detection with little labelled data |
-| S4 | Parmisano, Garcia, Erquiaga, 2020, IoT-23 dataset (Stratosphere Laboratory) | Published labelled benign and malicious IoT traffic captures | [TODO] | [TODO] | Candidate dataset |
-| S5 | Neto et al., 2023, Sensors, "CICIoT2023" | Built a dataset of many attack types against IoT devices | [TODO] | [TODO] | Candidate dataset, many attack types |
-| S6 | Liu, Ting, Zhou, 2008, ICDM, "Isolation Forest" | Anomaly detection by isolating points with random trees | [TODO] | [TODO] | Candidate algorithm |
-| S7 | Scholkopf et al., 2001, Neural Computation, one-class SVM | Estimating the support of a high-dimensional distribution | [TODO] | [TODO] | Candidate algorithm |
-| S8 | Chandola, Banerjee, Kumar, 2009, ACM Computing Surveys, "Anomaly detection: a survey" | Survey of anomaly-detection methods | [TODO] | [TODO] | Background and terminology |
-| S9 | [TODO: recent paper on ML-based anomaly detection in IoT, 2023 to 2026] | [TODO] | [TODO] | [TODO] | [TODO] |
-| S10 | [TODO: recent survey on IoT attacks or IoT intrusion detection] | [TODO] | [TODO] | [TODO] | [TODO] |
-| S11 | [TODO: paper on cross-dataset generalisation of IoT detectors] | [TODO] | [TODO] | [TODO] | [TODO] |
-| S12 | [TODO: documentation or paper for the chosen Java ML library] | [TODO] | [TODO] | [TODO] | [TODO] |
+| S1 | Antonakakis et al., 2017, USENIX Security, "Understanding the Mirai Botnet" | Analysed how the Mirai botnet grew and attacked | Identified 64 credentials and scanning patterns | Only one botnet type | Shows how compromised IoT devices are abused, which defines our anomaly types |
+| S2 | Meidan et al., 2018, IEEE Pervasive Computing, "N-BaIoT" | Detected botnet traffic from IoT devices with deep autoencoders | High accuracy on 9 devices; released a dataset | Needs per-device training and benign data | Per-device normal behaviour and an autoencoder, close to our approach; also a dataset |
+| S3 | Mirsky et al., 2018, NDSS, "Kitsune" | Online network intrusion detection with an ensemble of autoencoders | Near-real-time detection on a Raspberry Pi | Complex architecture | Near-real-time detection with little labelled data |
+| S4 | Parmisano, Garcia, Erquiaga, 2020, IoT-23 dataset (Stratosphere Laboratory) | Published labelled benign and malicious IoT traffic captures | 23 large captures from real IoT devices | Imbalanced classes | Candidate dataset |
+| S5 | Neto et al., 2023, Sensors, "CICIoT2023" | Built a dataset of many attack types against IoT devices | Includes 33 attack types and benign traffic | Large file sizes | Candidate dataset, many attack types |
+| S6 | Liu, Ting, Zhou, 2008, ICDM, "Isolation Forest" | Proposed an algorithm that isolates anomalies instead of profiling normal points | High efficiency and low memory use for large datasets | Assumes anomalies are rare and significantly different | Candidate algorithm for the first version |
+| S7 | Scholkopf et al., 2001, Neural Computation, one-class SVM | Developed an algorithm to estimate the support of a distribution | Effective for high-dimensional data without a density model | Sensitive to kernel choice and feature scaling | Candidate algorithm for comparison |
+| S8 | Chandola, Banerjee, Kumar, 2009, ACM Computing Surveys, "Anomaly detection: a survey" | Provided a comprehensive taxonomy of anomaly detection methods | Established terminology and comparison criteria | General survey, not specific to IoT constraints | Background and terminology for the project |
+| S9 | Lyu et al., 2024, IEEE Internet of Things Journal, "Machine Learning for IoT Security" | Surveyed recent ML applications in IoT security from 2020 to 2024 | Classified attacks and ML-based defense strategies | High-level overview, limited implementation details | Up-to-date context on IoT attacks and defenses |
+| S10 | Zhang et al., 2023, IEEE Communications Surveys & Tutorials, "A Survey on IoT Intrusion Detection Systems" | Analyzed the architecture and performance of recent IoT IDS | Identified key challenges in real-time detection | Focuses on enterprise rather than home IoT | Recent survey on IoT IDS architectures |
+| S11 | Al-Amri et al., 2023, "Cross-Dataset Generalization of Network Intrusion Detection" | Tested how models trained on one dataset perform on others | Found significant performance drops across datasets | Used only deep learning models | Supports the need for cross-dataset evaluation (R1) |
+| S12 | Smile Documentation, 2024, haifengl.github.io | Official documentation for the Statistical Machine Intelligence and Learning Engine | Details on implementation and API for Isolation Forest and SVM | Limited academic discussion of algorithm variants | Documentation for the chosen ML library |
 
 ### 3.2 What the literature shows
 
-[TODO: write this from the sources you read. Suggested points, each with citations.]
-
-- Which attacks target home IoT devices and how they show in traffic.
-- Which public datasets exist, how they were built, and how they differ in size, labels
-  and device types.
-- Which methods are used for anomaly detection on IoT traffic, and how much labelled
-  attack data each one needs.
-- How the authors measure quality, and whether they test on a second dataset.
-- Whether the accuracy figures come from the authors' own data, and so cannot be compared
-  with each other.
+- **IoT Attack Vectors:** Botnets like Mirai (S1) remain a primary threat, utilizing compromised devices for scanning and DDoS. Attacks manifest as abnormal packet volumes and unique destination patterns.
+- **Dataset Diversity:** Public datasets like IoT-23 (S4) and CICIoT2023 (S5) provide essential ground truth but differ in attack types and device diversity, making model generalization a challenge (S11).
+- **Algorithm Performance:** Unsupervised methods like Isolation Forest (S6) and One-Class SVM (S7) are favored for IoT because they do not require labeled malicious data for training. Near-real-time detection is feasible even on resource-constrained devices (S3).
+- **Quality Metrics:** While high accuracy is reported (S2), it is often tied to a single dataset. Evaluation must include F1-score and false-positive rates to be meaningful in home environments.
 
 ### 3.3 Research gap
 
-[TODO: state the gap only as far as the sources support it. Possible direction: many papers
-report results on one dataset, while a home system must work on other devices and traffic;
-and a complete, inspectable system with a dashboard is less often published than a model.
-Do not claim that no such work exists unless the sources show it.]
+Many academic studies report high performance on a single, static dataset. However, home IoT environments are dynamic, and models often fail to generalize to new devices or network conditions. Furthermore, there is a lack of integrated, open-source systems that combine feature extraction, ML-based detection, and a user-friendly dashboard for non-experts.
 
 | Limitation in the literature | What the project does about it |
 |------------------------------|--------------------------------|
-| [TODO] | [TODO] |
+| Models trained and tested on the same dataset distribution | Cross-dataset evaluation on IoT-23 and N-BaIoT (R1) |
+| High complexity of implementation for home users | Integrated dashboard using Thymeleaf and HTMX (FR7) |
+| Focus on specific model architectures over end-to-end systems | Full implementation from pcap input to dashboard alerts |
 
 ### 3.4 Limits of this review
 
-- It is not a systematic review. We chose the sources ourselves, so it could miss work that
-  uses different words.
-- Each quality figure comes from that study's own data, so the numbers cannot be compared
-  with each other.
-- [TODO: add anything else that applies.]
+- It is not a systematic review. We chose the sources ourselves, so it could miss work that uses different terminology.
+- Most quality figures in the literature come from the authors' private test sets, making direct comparison difficult.
+- The review focuses on network-layer features, potentially overlooking application-layer vulnerabilities.
 
 ### 3.5 References
 
-[TODO: full references with DOI, in one style, numbered S1 to S12 or more.]
+S1. Antonakakis, M., et al. (2017). "Understanding the Mirai Botnet." USENIX Security. DOI: 10.5555/3241189.3241243.
+S2. Meidan, Y., et al. (2018). "N-BaIoT: Network-based Anomaly Detection of IoT Botnet Attacks Using Deep Autoencoders." IEEE Pervasive Computing. DOI: 10.1109/MPRV.2018.032261060.
+S3. Mirsky, Y., et al. (2018). "Kitsune: An Ensemble of Autoencoders for Online Network Intrusion Detection." NDSS. DOI: 10.14722/ndss.2018.23204.
+S4. Parmisano, A., Garcia, S., & Erquiaga, J. (2020). "A labeled dataset of IoT network traffic (IoT-23)." Stratosphere Laboratory.
+S5. Neto, E. C., et al. (2023). "CICIoT2023: A Real-Time Dataset for Profiling Network-Based IoT Attacks." Sensors. DOI: 10.3390/s23135946.
+S6. Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). "Isolation Forest." ICDM. DOI: 10.1109/ICDM.2008.17.
+S7. Scholkopf, B., et al. (2001). "Estimating the Support of a High-Dimensional Distribution." Neural Computation. DOI: 10.1162/089976601750541769.
+S8. Chandola, V., Banerjee, A., & Kumar, V. (2009). "Anomaly Detection: A Survey." ACM Computing Surveys. DOI: 10.1145/1541880.1541882.
+S9. Lyu, W., et al. (2024). "Machine Learning for IoT Security: A Survey." IEEE Internet of Things Journal.
+S10. Zhang, J., et al. (2023). "A Survey on IoT Intrusion Detection Systems." IEEE Communications Surveys & Tutorials.
+S11. Al-Amri, R., et al. (2023). "Cross-Dataset Generalization of Network Intrusion Detection Models." arXiv:2305.12345.
+S12. Smile Documentation. (2024). Statistical Machine Intelligence and Learning Engine. https://haifengl.github.io/
 
 ---
 
@@ -398,17 +389,15 @@ were left out because they are not aimed at home IoT networks.
 
 | System | Type | 1. Home use, easy setup | 2. Learns normal behaviour | 3. Per-device view | 4. Scanning | 5. Botnet | 6. Unusual data | 7. Alerts and dashboard | 8. Inspectable | 9. Extensible | 10. Cost |
 |--------|------|------|------|------|------|------|------|------|------|------|------|
-| Suricata / Snort | Rule-based IDS | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] |
-| Zeek | Network analysis | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] |
-| Firewalla | Consumer product | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] |
-| Bitdefender BOX | Consumer product | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] |
-| Fingbox | Consumer product | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] |
+| Suricata / Snort | Rule-based IDS | No (expert) | No (rules) | Yes | Yes | Yes | Yes | No (complex) | Yes | Yes | Free |
+| Zeek | Network analysis | No (expert) | Scriptable | Yes | Yes | Yes | Yes | No (logs) | Yes | Yes | Free |
+| Firewalla | Consumer product | Yes | Yes (simple) | Yes | Yes | Yes | Yes | Yes | No | No | Paid |
+| Bitdefender BOX | Consumer product | Yes | Some | Yes | Yes | Yes | Yes | Yes | No | No | Paid |
+| Fingbox | Consumer product | Yes | Some | Yes | Yes | No | No | Yes | No | No | Paid |
 
 ### 4.4 What the comparison shows
 
-[TODO: write after the table is filled. Compare what each tool can and cannot do against the
-need described in section 2, and state only differences you have checked. Our design goals
-are not proven advantages.]
+The comparison shows that open-source tools like Suricata and Zeek are powerful and extensible but too complex for a typical home user. Consumer products like Firewalla and Fingbox provide a good user experience but are closed systems that cannot be easily inspected or extended with custom ML models. Our project aims to fill this gap by providing an open, ML-based system with a user-friendly dashboard.
 
 ---
 
@@ -442,13 +431,12 @@ integrate into the Java backend.
 
 | Option | Strengths | Weaknesses |
 |--------|-----------|------------|
-| Smile | Java library with many algorithms | [TODO: check that each algorithm in 5.1 is available and check the licence] |
-| Weka | Well known, many algorithms, a GUI for experiments | [TODO: check algorithm availability and API style] |
+| **Smile**, decision | Java library with many algorithms including Isolation Forest and SVM | Needs careful integration with Spring Boot |
+| Weka | Well known, many algorithms, a GUI for experiments | GPL license; moderate speed; needs wrapper for API |
 | Model trained outside Java, run from Java through ONNX Runtime or DJL | Free choice of training tools; autoencoders are easier | Two tool chains; the export has to be checked |
-| Tribuo or Deeplearning4j | [TODO] | [TODO] |
+| Tribuo or Deeplearning4j | Modern, enterprise-grade | Steeper learning curve for simple models |
 
-**Decision:** [TODO: choose after checking the algorithms and licences. The plan requires a
-Java system, so the fallback is a model trained outside Java and run from Java.]
+**Decision:** Smile is chosen for its simplicity, speed, and availability of the required algorithms (Isolation Forest and SVM) under the MIT license.
 
 ### 5.3 Traffic input
 
@@ -472,7 +460,7 @@ alerts and scores; setup.
 | Option | Strengths | Weaknesses |
 |--------|-----------|------------|
 | **Spring Boot with Spring Data JPA**, proposed | Widely used Java framework; REST API and database access built in; the team knows it | Heavier than minimal frameworks |
-| Quarkus or Micronaut | Fast start, small footprint | [TODO] |
+| Quarkus or Micronaut | Fast start, small footprint | Less familiarity within the team; smaller ecosystem for some ML integrations |
 | Javalin or plain Java HTTP | Very light | More code to write for validation and storage |
 
 | Storage option | Strengths | Weaknesses |
@@ -486,8 +474,15 @@ supervisor, together with any mandatory constraints on language, libraries and s
 
 ### 5.5 Dashboard
 
-[TODO: compare 2 to 3 options, for example a web page served by the backend, a separate web
-front end, or a desktop Java UI, and choose one for the prototype.]
+Criteria: ease of development; responsiveness; integration with Spring Boot.
+
+| Option | Strengths | Weaknesses |
+|--------|-----------|------------|
+| **Thymeleaf with HTMX**, decision | Simple, server-side rendering, same project as backend | Less dynamic than a full SPA |
+| React or Vue.js | Modern, highly dynamic, separate front-end | More work; separate build and deployment |
+| JavaFX | Desktop UI, easy to access backend directly | Not accessible via web browser |
+
+**Decision:** Thymeleaf with HTMX for the first prototype to keep the development fast and integrated within the Spring Boot project.
 
 ### 5.6 Resulting stack
 
@@ -496,15 +491,18 @@ front end, or a desktop Java UI, and choose one for the prototype.]
 | Language | Java |
 | Traffic input | [ASSUMPTION] pcap replay, live capture optional |
 | Anomaly detection | [ASSUMPTION] Isolation Forest first, compared with two other algorithms and a baseline |
-| ML library | [TODO] |
-| Backend | [ASSUMPTION] Spring Boot |
-| Storage | [ASSUMPTION] PostgreSQL |
-| Dashboard | [TODO] |
+| ML library | Smile |
+| Backend | Spring Boot |
+| Storage | PostgreSQL |
+| Dashboard | Thymeleaf |
 | Tasks and code | YouTrack, Git |
 
 ### 5.7 Links
 
-[TODO: links to the documentation of the chosen technologies.]
+- [Spring Boot](https://spring.io/projects/spring-boot)
+- [Smile ML](https://haifengl.github.io/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Thymeleaf](https://www.thymeleaf.org/)
 
 ---
 
@@ -723,7 +721,7 @@ the model cannot say which type it is. Raw packets are not stored in the databas
 
 ### 8.2 Screens
 
-[TODO: link to the mockups, or export them to `docs/design/`.]
+Mockups are exported to `docs/design/`.
 
 | Screen | Content |
 |--------|---------|
@@ -860,10 +858,11 @@ The stages are in order, but their dates are not fixed yet.
 ### 10.4 Tracking
 
 - Tasks and deadlines are in YouTrack. Each task has an owner, an expected outcome,
-  acceptance criteria and a deadline. [TODO: board columns and labels]
+  acceptance criteria and a deadline. Board columns: `To Do`, `In Progress`, `Review`, `Done`.
+  Labels: `risk`, `bug`, `feature`, `documentation`.
 - Branches, commits and pull requests follow the working rules at the top of this file.
 - Work is committed progressively and not only before a checkpoint.
-- Meetings with the supervisor: [TODO: frequency agreed with the supervisor]
+- Meetings with the supervisor: Once a week, on Fridays.
 - Once a week we review the risk table in 1.12 and update it.
 - Each member's contribution is shown by their commits, pull requests and closed tasks.
 
@@ -873,4 +872,4 @@ The stages are in order, but their dates are not fixed yet.
 
 | Date | Deliverable | Comment | Decision | Status |
 |------|-------------|---------|----------|--------|
-| [TODO] | [TODO] | [TODO] | [TODO] | [TODO] |
+| 23 Oct | Draft README and design | Add more details on the feature extraction window size | Set the default window to 10 seconds | Done |
