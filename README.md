@@ -13,6 +13,13 @@ their normal behaviour looks like and notifies the user about suspicious activit
 compromised device, network scanning, participation in a botnet or unusual data
 transmission.
 
+**Status:** Accepted. Work is in progress.
+
+**Links**
+
+- Repository: <https://github.com/Tofucherry/iot-anomaly-detection>
+- Project board (GitHub Projects): <https://github.com/users/Tofucherry/projects/1/views/1?layout_template=board>
+
 > **How to read this file.** `[ASSUMPTION]` marks a number or decision that is our own
 > estimate and will be fixed after measurement or after the supervisor meeting.
 
@@ -31,6 +38,8 @@ transmission.
 11. [Supervisor feedback](#11-supervisor-feedback)
 
 ## Repository
+
+GitHub: <https://github.com/Tofucherry/iot-anomaly-detection>
 
 ```
 README.md        this file: all components
@@ -301,7 +310,7 @@ anomaly detection, with recent sources first for fast-moving topics.
 
 | ID | Source | What they did | Result | Limitation they report | Why it matters here |
 |----|--------|---------------|--------|------------------------|---------------------|
-| S1 | Antonakakis et al., 2017, USENIX Security, "Understanding the Mirai Botnet" | Analysed how the Mirai botnet grew and attacked | Identified 64 credentials and scanning patterns | Only one botnet type | Shows how compromised IoT devices are abused, which defines our anomaly types |
+| S1 | Antonakakis et al., 2017, USENIX Security, "Understanding the Mirai Botnet" | Seven-month measurement study of how the Mirai botnet emerged, grew and attacked | Growth to a peak of about 600k infections; the original variant infected devices through Telnet and SSH logins with default credentials | One botnet family and its variants, measured from the Internet side and not inside a home network | Shows how compromised IoT devices are abused, which defines our anomaly types |
 | S2 | Meidan et al., 2018, IEEE Pervasive Computing, "N-BaIoT" | Detected botnet traffic from IoT devices with deep autoencoders | High accuracy on 9 devices; released a dataset | Needs per-device training and benign data | Per-device normal behaviour and an autoencoder, close to our approach; also a dataset |
 | S3 | Mirsky et al., 2018, NDSS, "Kitsune" | Online network intrusion detection with an ensemble of autoencoders | Near-real-time detection on a Raspberry Pi | Complex architecture | Near-real-time detection with little labelled data |
 | S4 | Parmisano, Garcia, Erquiaga, 2020, IoT-23 dataset (Stratosphere Laboratory) | Published labelled benign and malicious IoT traffic captures | 23 large captures from real IoT devices | Imbalanced classes | Candidate dataset |
@@ -309,16 +318,16 @@ anomaly detection, with recent sources first for fast-moving topics.
 | S6 | Liu, Ting, Zhou, 2008, ICDM, "Isolation Forest" | Proposed an algorithm that isolates anomalies instead of profiling normal points | High efficiency and low memory use for large datasets | Assumes anomalies are rare and significantly different | Candidate algorithm for the first version |
 | S7 | Scholkopf et al., 2001, Neural Computation, one-class SVM | Developed an algorithm to estimate the support of a distribution | Effective for high-dimensional data without a density model | Sensitive to kernel choice and feature scaling | Candidate algorithm for comparison |
 | S8 | Chandola, Banerjee, Kumar, 2009, ACM Computing Surveys, "Anomaly detection: a survey" | Provided a comprehensive taxonomy of anomaly detection methods | Established terminology and comparison criteria | General survey, not specific to IoT constraints | Background and terminology for the project |
-| S9 | Lyu et al., 2024, IEEE Internet of Things Journal, "Machine Learning for IoT Security" | Surveyed recent ML applications in IoT security from 2020 to 2024 | Classified attacks and ML-based defense strategies | High-level overview, limited implementation details | Up-to-date context on IoT attacks and defenses |
-| S10 | Zhang et al., 2023, IEEE Communications Surveys & Tutorials, "A Survey on IoT Intrusion Detection Systems" | Analyzed the architecture and performance of recent IoT IDS | Identified key challenges in real-time detection | Focuses on enterprise rather than home IoT | Recent survey on IoT IDS architectures |
-| S11 | Al-Amri et al., 2023, "Cross-Dataset Generalization of Network Intrusion Detection" | Tested how models trained on one dataset perform on others | Found significant performance drops across datasets | Used only deep learning models | Supports the need for cross-dataset evaluation (R1) |
+| S9 | Kikissagbe and Adda, 2024, Electronics, "Machine Learning-Based Intrusion Detection Methods in IoT Systems: A Comprehensive Review" | Reviewed supervised, unsupervised, deep-learning and hybrid ML methods for intrusion detection in IoT, covering articles from 2013 to 2024 | Overview of the approaches and the challenges of applying them to IoT | Review only, no own experiments | Up-to-date context on ML methods for IoT intrusion detection |
+| S10 | Rafique et al., 2024, Sensors, "Machine Learning and Deep Learning Techniques for Internet of Things Network Anomaly Detection: Current Research Trends" | Reviewed 60 papers from 2018 to 2024 on ML and DL anomaly detection in IoT networks | Concludes that further development needs varied datasets, real-time testing and scalable systems | Review only, no own experiments | Supports cross-dataset evaluation (R1) and near-real-time testing |
+| S11 | Alsoufi et al., 2021, Applied Sciences, "Anomaly-Based Intrusion Detection Systems in IoT Using Deep Learning: A Systematic Literature Review" | Systematic literature review of anomaly-based IoT intrusion detection with deep learning | Found that supervised deep-learning techniques performed better than unsupervised and semi-supervised ones | Focus on deep learning; results come from the reviewed studies | Reason to add a supervised reference model next to our unsupervised detectors |
 | S12 | Smile Documentation, 2024, haifengl.github.io | Official documentation for the Statistical Machine Intelligence and Learning Engine | Details on implementation and API for Isolation Forest and SVM | Limited academic discussion of algorithm variants | Documentation for the chosen ML library |
 
 ### 3.2 What the literature shows
 
 - **IoT Attack Vectors:** Botnets like Mirai (S1) remain a primary threat, utilizing compromised devices for scanning and DDoS. Attacks manifest as abnormal packet volumes and unique destination patterns.
-- **Dataset Diversity:** Public datasets like IoT-23 (S4) and CICIoT2023 (S5) provide essential ground truth but differ in attack types and device diversity, making model generalization a challenge (S11).
-- **Algorithm Performance:** Unsupervised methods like Isolation Forest (S6) and One-Class SVM (S7) are favored for IoT because they do not require labeled malicious data for training. Near-real-time detection is feasible even on resource-constrained devices (S3).
+- **Dataset Diversity:** Public datasets like IoT-23 (S4) and CICIoT2023 (S5) provide essential ground truth but differ in attack types and device diversity, making model generalization a challenge (S10).
+- **Algorithm Performance:** Unsupervised methods like Isolation Forest (S6) and One-Class SVM (S7) can be trained on benign traffic only, which suits a home network without labelled attacks; reviewed studies report better performance for supervised deep learning when labelled attack data exist (S11). Near-real-time detection is feasible even on resource-constrained devices (S3).
 - **Quality Metrics:** While high accuracy is reported (S2), it is often tied to a single dataset. Evaluation must include F1-score and false-positive rates to be meaningful in home environments.
 
 ### 3.3 Research gap
@@ -339,17 +348,28 @@ Many academic studies report high performance on a single, static dataset. Howev
 
 ### 3.5 References
 
-S1. Antonakakis, M., et al. (2017). "Understanding the Mirai Botnet." USENIX Security. DOI: 10.5555/3241189.3241243.
-S2. Meidan, Y., et al. (2018). "N-BaIoT: Network-based Anomaly Detection of IoT Botnet Attacks Using Deep Autoencoders." IEEE Pervasive Computing. DOI: 10.1109/MPRV.2018.032261060.
+S1. Antonakakis, M., et al. (2017). "Understanding the Mirai Botnet." In 26th USENIX Security Symposium (USENIX Security 17), pp. 1093-1110. https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/antonakakis
+
+S2. Meidan, Y., Bohadana, M., Mathov, Y., Mirsky, Y., Shabtai, A., Breitenbacher, D., & Elovici, Y. (2018). "N-BaIoT: Network-Based Detection of IoT Botnet Attacks Using Deep Autoencoders." IEEE Pervasive Computing, 17(3), 12-22. DOI: 10.1109/MPRV.2018.03367731.
+
 S3. Mirsky, Y., et al. (2018). "Kitsune: An Ensemble of Autoencoders for Online Network Intrusion Detection." NDSS. DOI: 10.14722/ndss.2018.23204.
-S4. Parmisano, A., Garcia, S., & Erquiaga, J. (2020). "A labeled dataset of IoT network traffic (IoT-23)." Stratosphere Laboratory.
-S5. Neto, E. C., et al. (2023). "CICIoT2023: A Real-Time Dataset for Profiling Network-Based IoT Attacks." Sensors. DOI: 10.3390/s23135946.
+
+S4. Parmisano, A., Garcia, S., & Erquiaga, M. J. (2020). "A labeled dataset with malicious and benign IoT network traffic (IoT-23)." Stratosphere Laboratory, Czech Technical University in Prague. DOI: 10.5281/zenodo.4743746. https://www.stratosphereips.org/datasets-iot23
+
+S5. Neto, E. C. P., Dadkhah, S., Ferreira, R., Zohourian, A., Lu, R., & Ghorbani, A. A. (2023). "CICIoT2023: A Real-Time Dataset and Benchmark for Large-Scale Attacks in IoT Environment." Sensors, 23(13), 5941. DOI: 10.3390/s23135941.
+
 S6. Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). "Isolation Forest." ICDM. DOI: 10.1109/ICDM.2008.17.
-S7. Scholkopf, B., et al. (2001). "Estimating the Support of a High-Dimensional Distribution." Neural Computation. DOI: 10.1162/089976601750541769.
+
+S7. Scholkopf, B., Platt, J. C., Shawe-Taylor, J., Smola, A. J., & Williamson, R. C. (2001). "Estimating the Support of a High-Dimensional Distribution." Neural Computation, 13(7), 1443-1471. DOI: 10.1162/089976601750264965.
+
 S8. Chandola, V., Banerjee, A., & Kumar, V. (2009). "Anomaly Detection: A Survey." ACM Computing Surveys. DOI: 10.1145/1541880.1541882.
-S9. Lyu, W., et al. (2024). "Machine Learning for IoT Security: A Survey." IEEE Internet of Things Journal.
-S10. Zhang, J., et al. (2023). "A Survey on IoT Intrusion Detection Systems." IEEE Communications Surveys & Tutorials.
-S11. Al-Amri, R., et al. (2023). "Cross-Dataset Generalization of Network Intrusion Detection Models." arXiv:2305.12345.
+
+S9. Kikissagbe, B. R., & Adda, M. (2024). "Machine Learning-Based Intrusion Detection Methods in IoT Systems: A Comprehensive Review." Electronics, 13(18), 3601. DOI: 10.3390/electronics13183601.
+
+S10. Rafique, S. H., Abdallah, A., Musa, N. S., & Murugan, T. (2024). "Machine Learning and Deep Learning Techniques for Internet of Things Network Anomaly Detection: Current Research Trends." Sensors, 24(6), 1968. DOI: 10.3390/s24061968.
+
+S11. Alsoufi, M. A., et al. (2021). "Anomaly-Based Intrusion Detection Systems in IoT Using Deep Learning: A Systematic Literature Review." Applied Sciences, 11(18), 8383. DOI: 10.3390/app11188383.
+
 S12. Smile Documentation. (2024). Statistical Machine Intelligence and Learning Engine. https://haifengl.github.io/
 
 ---
@@ -857,6 +877,7 @@ The stages are in order, but their dates are not fixed yet.
 
 ### 10.4 Tracking
 
+- Project board: GitHub Projects, <https://github.com/users/Tofucherry/projects/1/views/1?layout_template=board>.
 - Tasks and deadlines are in YouTrack. Each task has an owner, an expected outcome,
   acceptance criteria and a deadline. Board columns: `To Do`, `In Progress`, `Review`, `Done`.
   Labels: `risk`, `bug`, `feature`, `documentation`.
@@ -872,4 +893,4 @@ The stages are in order, but their dates are not fixed yet.
 
 | Date | Deliverable | Comment | Decision | Status |
 |------|-------------|---------|----------|--------|
-| 23 Oct | Draft README and design | Add more details on the feature extraction window size | Set the default window to 10 seconds | Done |
+| 24 Oct | README and project plan for pre-defense 1 | Accepted. Work is in progress. | Accepted | Work is in progress |
